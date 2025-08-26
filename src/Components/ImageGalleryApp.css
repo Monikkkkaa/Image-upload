@@ -1,0 +1,87 @@
+/* Container */
+.gallery-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header */
+.gallery-container h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+/* Upload section */
+.upload-section {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.upload-section input[type="file"] {
+  padding: 10px 15px;
+  border: 2px solid #6c63ff;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.upload-section button {
+  padding: 10px 25px;
+  background: linear-gradient(135deg, #6c63ff, #4b47c7);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Gallery grid */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+/* Image card */
+.image-card {
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.image-card img {
+  width: 100%;
+  height: 200px; /* uniform height */
+  object-fit: cover; /* ensures images are not stretched */
+  transition: transform 0.3s ease;
+}
+
+.image-card img:hover {
+  transform: scale(1.05);
+}
+
+.image-card p {
+  margin: 10px 0;
+  font-weight: 600;
+  color: #555;
+}
+
+.image-card button {
+  background: #ff4b5c;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.image-card button:hover {
+  background: #ff2e40;
+}
