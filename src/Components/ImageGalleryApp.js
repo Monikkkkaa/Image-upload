@@ -21,32 +21,36 @@ const ImageGalleryApp = () => {
   }, []);
 
   const handleFileChange = (e) => setFiles(e.target.files);
+// handleUpload function mein:
+const handleUpload = async () => {
+  if (!files || files.length === 0) return;
+  const formData = new FormData();
 
-  const handleUpload = async () => {
-    if (!files || files.length === 0) return;
-    const formData = new FormData();
+  // Yeh line multiple files ke liye:
+  for (let i = 0; i < files.length; i++) {
+    formData.append("image", files[i]); // Multiple files same name se append karo
+  }
 
-    for (let i = 0; i < files.length; i++) {
-      formData.append("image", files[i]);
-      formData.append("name", files[i].name);
+  try {
+    setLoading(true);
+    const res = await axios.post(
+      "http://localhost:5000/api/images/upload",
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+    
+    // Multiple images response handle karo:
+    if (res.data.images) {
+      setImages(prev => [...res.data.images, ...prev]);
     }
-
-    try {
-      setLoading(true);
-      const res = await axios.post(
-        "http://localhost:5000/api/images/upload",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-      setImages(prev => [res.data, ...prev]);
-      setFiles([]);
-    } catch (err) {
-      console.error("Upload error:", err.response || err);
-      alert("Failed to upload image");
-    } finally {
-      setLoading(false);
-    }
-  };
+    setFiles([]);
+  } catch (err) {
+    console.error("Upload error:", err);
+    alert("Failed to upload images");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleDelete = async (id) => {
     try {

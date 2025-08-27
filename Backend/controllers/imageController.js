@@ -1,21 +1,35 @@
 const db = require("../config/db");
 
 exports.uploadImage = (req, res) => {
-  if (!req.file) return res.status(400).json({ message: "No file uploaded!" });
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ message: "No files uploaded!" });
+  }
 
-  const { name } = req.body; 
-  const imageName = name || req.file.originalname; 
-  const filePath = `/uploads/${req.file.filename}`;
+  const uploadedImages = [];
+  let processedCount = 0;
 
+  req.files.forEach((file) => {
+    const imageName = file.originalname;
+    const filePath = `/uploads/${file.filename}`;
 
-  const sql = "INSERT INTO images (name, path) VALUES (?, ?)";
-  db.query(sql, [imageName, filePath], (err, result) => {
-    if (err) return res.status(500).json({ message: "Database error", error: err });
-    res.json({ 
-      message: "Image uploaded successfully", 
-      id: result.insertId, 
-      name: imageName, 
-      path: filePath
+    const sql = "INSERT INTO images (name, path) VALUES (?, ?)";
+    db.query(sql, [imageName, filePath], (err, result) => {
+      if (err) return res.status(500).json({ message: "Database error", error: err });
+      
+      uploadedImages.push({
+        id: result.insertId,
+        name: imageName,
+        path: filePath
+      });
+
+      processedCount++;
+      
+      if (processedCount === req.files.length) {
+        res.json({
+          message: "Images uploaded successfully",
+          images: uploadedImages
+        });
+      }
     });
   });
 };
